@@ -6,14 +6,16 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml" fx:controller="ch.ocram.tcptap.MainViewController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml">
   <children>
-    <Button layoutX="192.0" layoutY="151.0" mnemonicParsing="false" onAction="#onStartMonitoring" text="Start monitoring" />
-    <TextField id="txtAddress" fx:id="txtTargetHost" layoutX="100.0" layoutY="70.0" prefWidth="200.0" promptText="Hostname or IP" />
-    <Label labelFor="$txtTargetHost" layoutX="14.0" layoutY="73.0" text="Target Host/IP" />
-    <Label layoutX="14.0" layoutY="14.0" text="Port to listen to" />
-    <TextField fx:id="txtListenPort" layoutX="100.0" layoutY="11.0" prefWidth="200.0" promptText="Listen port" />
-    <TextField fx:id="txtTargetPort" layoutX="100.0" layoutY="101.0" prefWidth="200.0" promptText="Port" />
-    <Label layoutX="14.0" layoutY="104.0" text="Target port" />
+    <TabPane id="tabs" fx:id="tabsMain" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <tabs>
+        <Tab id="mainTab" fx:id="tabMonitor" text="Monitor">
+          <content>
+            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+          </content>
+        </Tab>
+      </tabs>
+    </TabPane>
   </children>
 </AnchorPane>

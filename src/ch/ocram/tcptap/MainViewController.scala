@@ -2,36 +2,45 @@ package ch.ocram.tcptap
 
 import java.net.URL
 import java.util
-import javafx.scene.{layout => jfxsl}
-import javafx.{event => jfxe}
-import javafx.{fxml => jfxf}
+import javafx.scene.{ layout => jfxsl }
+import javafx.{ event => jfxe }
+import javafx.{ fxml => jfxf }
 import scalafx.scene.layout.GridPane
-import javafx.scene.{control => jfxsc }
+import javafx.scene.{ control => jfxsc }
 import scalafx.scene.control.TextField
+import scalafx.scene.control.Tab
+import scalafx.scene.control.TabPane
+import java.io.IOException
+import javafx.fxml.FXMLLoader
+import javafx.scene.Parent
 
 class MainViewController extends jfxf.Initializable {
 
   @jfxf.FXML
-  private var txtListenPort: jfxsc.TextField = null
-  private var listenPort: TextField = _
+  private var tabMonitor: jfxsc.Tab = null
+  private var monitorTab: Tab = _
 
   @jfxf.FXML
-  private var txtTargetHost: jfxsc.TextField = null
-  private var targetHost: TextField = _
+  private var tabsMain: jfxsc.TabPane = null
+  private var tabs: TabPane = _
 
-  @jfxf.FXML
-  private var txtTargetPort: jfxsc.TextField = null
-  private var targetPort: TextField = _
-
-  @jfxf.FXML
-  private def onStartMonitoring(event: jfxe.ActionEvent) {
-    println(s"${listenPort.text.value} ==> ${targetHost.text.value}:${targetPort.text.value}");
+  private var view : Parent = null
+  
+  val fxmlLoader = new FXMLLoader(getClass.getResource("MainView.fxml"));
+  fxmlLoader.setController(this);
+  try {
+    view = fxmlLoader.load().asInstanceOf[Parent]
+  } catch {
+    case ex: IOException => throw new RuntimeException(ex);
   }
 
-
+  def getView = view
+  
   def initialize(url: URL, rb: util.ResourceBundle) {
-    listenPort = new TextField(txtListenPort)
-    targetHost = new TextField(txtTargetHost)
-    targetPort = new TextField(txtTargetPort)
+    monitorTab = new Tab(tabMonitor)
+    tabs = new TabPane(tabsMain)
+
+    val monitorConfigViewController = new MonitorConfigViewController()
+    monitorTab.setContent(monitorConfigViewController.getView)
   }
 }
