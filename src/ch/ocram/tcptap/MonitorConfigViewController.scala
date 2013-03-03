@@ -1,16 +1,15 @@
 package ch.ocram.tcptap
 
-import java.net.URL
-import java.util
-import javafx.scene.{ layout => jfxsl }
-import javafx.{ event => jfxe }
-import javafx.{ fxml => jfxf }
-import scalafx.scene.layout.GridPane
-import javafx.scene.{ control => jfxsc }
-import scalafx.scene.control.TextField
-import javafx.scene.Parent
-import javafx.fxml.FXMLLoader
 import java.io.IOException
+import java.net.URL
+
+import java.util
+import javafx.{event => jfxe}
+import javafx.{fxml => jfxf}
+import javafx.fxml.FXMLLoader
+import javafx.scene.Parent
+import javafx.scene.{control => jfxsc}
+import scalafx.scene.control.TextField
 
 class MonitorConfigViewController extends jfxf.Initializable {
 

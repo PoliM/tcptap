@@ -1,18 +1,16 @@
 package ch.ocram.tcptap
 
-import java.net.URL
-import java.util
-import javafx.scene.{ layout => jfxsl }
-import javafx.{ event => jfxe }
-import javafx.{ fxml => jfxf }
-import scalafx.scene.layout.GridPane
-import javafx.scene.{ control => jfxsc }
-import scalafx.scene.control.TextField
-import scalafx.scene.control.Tab
-import scalafx.scene.control.TabPane
 import java.io.IOException
+import java.net.URL
+
+import java.util
+import javafx.{fxml => jfxf}
 import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
+import javafx.scene.{control => jfxsc}
+import scalafx.scene.control.Tab
+import scalafx.scene.control.Tab.sfxTab2jfx
+import scalafx.scene.control.TabPane
 
 class MainViewController extends jfxf.Initializable {
 
