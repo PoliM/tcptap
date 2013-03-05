@@ -1,4 +1,4 @@
-package ch.ocram.tcptap
+package ch.ocram.tcptap.ui
 
 import scalafx.application.JFXApp
 import scalafx.application.JFXApp.PrimaryStage

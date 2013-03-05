@@ -18,6 +18,12 @@
                 <TableColumn prefWidth="75.0" text="Column X" />
               </columns>
             </TableView>
+            <Label layoutX="18.0" layoutY="16.0" text="Listening port" />
+            <Label layoutX="198.0" layoutY="16.0" text="Target host" />
+            <Label layoutX="481.0" layoutY="16.0" text="Target port" />
+            <TextField fx:id="fxmlListeningPort" disable="true" layoutX="99.0" layoutY="13.0" prefWidth="74.0" />
+            <TextField fx:id="fxmlTargetHost" disable="true" layoutX="272.0" layoutY="13.0" prefWidth="200.0" />
+            <TextField fx:id="fxmlTargetPort" disable="true" layoutX="556.0" layoutY="13.0" prefWidth="81.0" />
           </children>
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
