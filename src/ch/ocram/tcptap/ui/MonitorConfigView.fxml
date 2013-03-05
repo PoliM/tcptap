@@ -6,14 +6,15 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="322.0" xmlns:fx="http://javafx.com/fxml" >
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="322.0" xmlns:fx="http://javafx.com/fxml">
   <children>
-    <Button layoutY="151.0" mnemonicParsing="false" onAction="#onStartMonitoring" text="Start monitoring" AnchorPane.rightAnchor="10.0" />
+    <TextField fx:id="txtListenPort" prefWidth="200.0" promptText="Listen port" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
     <TextField id="txtAddress" fx:id="txtTargetHost" layoutY="70.0" prefWidth="200.0" promptText="Hostname or IP" AnchorPane.rightAnchor="10.0" />
+    <TextField fx:id="txtTargetPort" layoutY="101.0" prefWidth="200.0" promptText="Port" AnchorPane.rightAnchor="10.0" />
+    <Button defaultButton="true" layoutY="151.0" mnemonicParsing="false" onAction="#onStartMonitoring" text="Start monitoring" underline="false" AnchorPane.rightAnchor="10.0" />
     <Label labelFor="$txtTargetHost" layoutX="14.0" layoutY="73.0" text="Target Host/IP" />
     <Label layoutX="14.0" layoutY="14.0" text="Port to listen to" />
-    <TextField fx:id="txtListenPort" prefWidth="200.0" promptText="Listen port" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
-    <TextField fx:id="txtTargetPort" layoutY="101.0" prefWidth="200.0" promptText="Port" AnchorPane.rightAnchor="10.0" />
     <Label layoutX="14.0" layoutY="104.0" text="Target port" />
+    <Button layoutX="14.0" layoutY="151.0" mnemonicParsing="false" onAction="#onISpeci" text="18k =&gt; 19k" />
   </children>
 </AnchorPane>

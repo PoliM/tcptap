@@ -12,10 +12,10 @@
       <items>
         <AnchorPane id="" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
           <children>
-            <TableView fx:id="tblConnections" prefHeight="199.0" prefWidth="1022.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="106.0">
+            <TableView id="tblConnections" fx:id="fxmlTableConnections" prefHeight="252.0" prefWidth="1022.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="53.0">
               <columns>
-                <TableColumn prefWidth="75.0" text="Column X" />
-                <TableColumn prefWidth="75.0" text="Column X" />
+                <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="35.0" text="ID" fx:id="fxmlColId" />
+                <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="108.0" text="Remote Host" fx:id="fxmlColRemoteHost" />
               </columns>
             </TableView>
             <Label layoutX="18.0" layoutY="16.0" text="Listening port" />
@@ -30,8 +30,16 @@
           <children>
             <SplitPane dividerPositions="0.4948453608247423" focusTraversable="true" orientation="VERTICAL" prefHeight="293.0" prefWidth="598.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                  <children>
+                    <TextArea fx:id="fxmlRequest" prefHeight="237.0" prefWidth="1020.0" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  </children>
+                </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                  <children>
+                    <TextArea id="fxmlresponse" fx:id="fxmlResponse" prefHeight="242.0" prefWidth="1020.0" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  </children>
+                </AnchorPane>
               </items>
             </SplitPane>
           </children>

@@ -67,6 +67,13 @@ class MonitorConfigViewController(val mainViewController: MainViewController) ex
     }
   }
 
+  @jfxf.FXML
+  private def onISpeci(event: jfxe.ActionEvent){
+	  this.listenPort.text = "19000"
+	  this.targetHost.text = "localhost"
+	  this.targetPort.text = "18000"
+  }
+  
   def initialize(url: URL, rb: util.ResourceBundle) {
     listenPort = new TextField(txtListenPort)
     targetHost = new TextField(txtTargetHost)
