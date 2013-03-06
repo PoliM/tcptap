@@ -1,5 +1,6 @@
 package ch.ocram.tcptap.ui
 
+import javafx.{ event => jfxe }
 import scalafx.Includes._
 import java.io.IOException
 import java.net.URL
@@ -23,6 +24,7 @@ import scalafx.scene.control.TableView
 import scalafx.scene.control.TextArea
 import scalafx.beans.value.ObservableValue
 import scalafx.scene.control.SelectionMode
+import scalafx.scene.control.ComboBox
 
 class TapViewController(val srcPort: Int, val host: String, val trgPort: Int) extends jfxf.Initializable {
 
@@ -39,6 +41,10 @@ class TapViewController(val srcPort: Int, val host: String, val trgPort: Int) ex
   private var targetPort: TextField = _
 
   @jfxf.FXML
+  private var fxmlFormat: jfxsc.ComboBox[String] = null
+  private var format: ComboBox[String] = _
+
+  @jfxf.FXML
   private var fxmlTableConnections: jfxsc.TableView[ConnectionRecord] = null
   private var tableConnections: TableView[ConnectionRecord] = _
 
@@ -47,8 +53,20 @@ class TapViewController(val srcPort: Int, val host: String, val trgPort: Int) ex
   private var columnId: TableColumn[ConnectionRecord, String] = _
 
   @jfxf.FXML
+  private var fxmlColTime: jfxsc.TableColumn[ConnectionRecord, String] = null
+  private var columnTime: TableColumn[ConnectionRecord, String] = _
+
+  @jfxf.FXML
+  private var fxmlColActivity: jfxsc.TableColumn[ConnectionRecord, String] = null
+  private var columnActivity: TableColumn[ConnectionRecord, String] = _
+
+  @jfxf.FXML
   private var fxmlColRemoteHost: jfxsc.TableColumn[ConnectionRecord, String] = null
   private var columnRemoteHost: TableColumn[ConnectionRecord, String] = _
+
+  @jfxf.FXML
+  private var fxmlColInfo: jfxsc.TableColumn[ConnectionRecord, String] = null
+  private var columnInfo: TableColumn[ConnectionRecord, String] = _
 
   @jfxf.FXML
   private var fxmlRequest: jfxsc.TextArea = null
@@ -74,28 +92,63 @@ class TapViewController(val srcPort: Int, val host: String, val trgPort: Int) ex
 
   def getView = view
 
+  @jfxf.FXML
+  def onClose(event: jfxe.ActionEvent) {
+
+  }
+
+  @jfxf.FXML
+  def onRemoveSelected(event: jfxe.ActionEvent) {
+    val record = this.tableConnections.selectionModel().selectedItem()
+    if (record != null) {
+
+    }
+  }
+
+  @jfxf.FXML
+  def onRemoveAll(event: jfxe.ActionEvent) {
+
+  }
+
   def initialize(url: URL, rb: util.ResourceBundle) {
     this.listeningPort = new TextField(this.fxmlListeningPort)
     this.targetHost = new TextField(this.fxmlTargetHost)
     this.targetPort = new TextField(this.fxmlTargetPort)
+    this.format = new ComboBox(this.fxmlFormat)
     this.tableConnections = new TableView(this.fxmlTableConnections)
     this.columnId = new TableColumn(this.fxmlColId)
+    this.columnTime = new TableColumn(this.fxmlColTime)
+    this.columnActivity = new TableColumn(this.fxmlColActivity)
     this.columnRemoteHost = new TableColumn(this.fxmlColRemoteHost)
+    this.columnInfo = new TableColumn(this.fxmlColInfo)
     this.textRequest = new TextArea(this.fxmlRequest)
     this.textResponse = new TextArea(this.fxmlResponse)
-
-    this.tableConnections.items = this.connectionList
-    val selmodel = this.tableConnections.selectionModel()
-    selmodel.setSelectionMode(SelectionMode.SINGLE)
-    selmodel.cellSelectionEnabled = false
-    selmodel.selectedItem.onChange((_, _, newitem) => { this.showRecord(newitem) })
-
-    this.columnId.cellValueFactory = { _.value.id }
-    this.columnRemoteHost.cellValueFactory = { _.value.remoteHost }
 
     this.listeningPort.text = srcPort.toString()
     this.targetHost.text = host
     this.targetPort.text = trgPort.toString()
+
+    this.format.items().clear()
+    this.format += "String"
+    this.format += "XML"
+    this.format += "HEX"
+    this.format.selectionModel().select(0);
+    
+    this.tableConnections.items = this.connectionList
+    val selmodel = this.tableConnections.selectionModel()
+    selmodel.selectionMode = SelectionMode.SINGLE
+    selmodel.cellSelectionEnabled = false
+    selmodel.selectedItem.onChange((_, _, newitem) => { this.showRecord(newitem) })
+
+    this.columnId.cellValueFactory = { _.value.id }
+    this.columnTime.cellValueFactory = { _.value.time }
+    this.columnActivity.cellValueFactory = { _.value.activity }
+    this.columnRemoteHost.cellValueFactory = { _.value.remoteHost }
+    this.columnInfo.cellValueFactory = { _.value.info }
+
+    val textStyle = "-fx-font-family: 'Consolas', 'Envy Code R', 'monospace';"
+    this.textRequest.style = textStyle
+    this.textResponse.style = textStyle
 
     new Thread(this.connectionListener).start();
   }
@@ -105,8 +158,9 @@ class TapViewController(val srcPort: Int, val host: String, val trgPort: Int) ex
       this.textRequest.text = ""
       this.textResponse.text = ""
     } else {
-      this.textRequest.text = record.client2Target.getRawString()
-      this.textResponse.text = record.target2Client.getRawString()
+      val fmt = this.format.selectionModel().selectedItem()
+      this.textRequest.text = record.client2Target.getFormatedString(fmt)
+      this.textResponse.text = record.target2Client.getFormatedString(fmt)
     }
   }
 }

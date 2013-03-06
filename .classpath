@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.scala-ide.sdt.launching.SCALA_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/scalafx_2.10-1.0.0-M1.jar" sourcepath="lib/scalafx-1.0.0-M1-sources.jar"/>
 	<classpathentry kind="lib" path="C:/Dev/jdk1.7.0/jre/lib/jfxrt.jar" sourcepath="C:/Users/MarcoPoli/Downloads/Java/JavaFx/src">
@@ -9,5 +8,7 @@
 			<attribute name="javadoc_location" value="http://docs.oracle.com/javafx/2/api/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/MarcoPoli/Downloads/Scala/scala-2.10.1-RC2/lib/scala-library.jar"/>
+	<classpathentry kind="lib" path="C:/Users/MarcoPoli/Downloads/Scala/scala-2.10.1-RC2/lib/scala-reflect.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

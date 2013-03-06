@@ -17,8 +17,57 @@ class Data {
       currentIndex += length;
     }
   }
-  
-  def getRawString() = {
-    new String(buffer, 0, currentIndex)
+
+  def getFormatedString(fmt: String) = {
+    this.synchronized {
+      fmt match {
+        case "String" => new String(buffer, 0, currentIndex)
+        case "XML" => this.getXmlString()
+        case "HEX" => this.getHexString()
+        case _ => "unknown format"
+      }
+    }
+  }
+
+  private def getXmlString() = {
+    val str = new StringBuilder()
+
+    var before: Char = ' '
+    this.buffer.foreach({ b =>
+      val ch = b.asInstanceOf[Char]
+
+      if (ch == '<' && before == '>') {
+        str.append('\n')
+      }
+      str.append(ch)
+      before = ch
+    })
+
+    str.toString()
+  }
+
+  private def getHexString() = {
+    val hexStr = new StringBuilder()
+    val txtStr = new StringBuilder()
+
+    var idx = 0
+    this.buffer.foreach({ b =>
+
+      if (b < 32) {
+        txtStr.append('.')
+      } else {
+        txtStr.append(b.asInstanceOf[Char])
+      }
+      hexStr.append("%02X" format b).append(" ")
+
+      idx += 1
+      if (idx % 16 == 0) {
+        hexStr.append("  ").append(txtStr.toString()).append('\n')
+        txtStr.clear()
+      }
+
+    })
+
+    hexStr.toString()
   }
 }

@@ -2,6 +2,7 @@
 
 <?import java.lang.*?>
 <?import java.util.*?>
+<?import javafx.collections.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
@@ -15,15 +16,31 @@
             <TableView id="tblConnections" fx:id="fxmlTableConnections" prefHeight="252.0" prefWidth="1022.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="53.0">
               <columns>
                 <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="35.0" text="ID" fx:id="fxmlColId" />
-                <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="108.0" text="Remote Host" fx:id="fxmlColRemoteHost" />
+                <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="121.0" text="Time" fx:id="fxmlColTime" />
+                <TableColumn prefWidth="75.0" text="Activity" fx:id="fxmlColActivity" />
+                <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="124.0" text="Remote Host" fx:id="fxmlColRemoteHost" />
+                <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="665.0" text="Info" fx:id="fxmlColInfo" />
               </columns>
             </TableView>
             <Label layoutX="18.0" layoutY="16.0" text="Listening port" />
-            <Label layoutX="198.0" layoutY="16.0" text="Target host" />
-            <Label layoutX="481.0" layoutY="16.0" text="Target port" />
-            <TextField fx:id="fxmlListeningPort" disable="true" layoutX="99.0" layoutY="13.0" prefWidth="74.0" />
-            <TextField fx:id="fxmlTargetHost" disable="true" layoutX="272.0" layoutY="13.0" prefWidth="200.0" />
-            <TextField fx:id="fxmlTargetPort" disable="true" layoutX="556.0" layoutY="13.0" prefWidth="81.0" />
+            <Label layoutX="165.0" layoutY="16.0" text="Target host" />
+            <Label layoutX="400.0" layoutY="16.0" text="Target port" />
+            <TextField fx:id="fxmlListeningPort" disable="true" layoutX="99.0" layoutY="13.0" prefWidth="61.0" />
+            <TextField fx:id="fxmlTargetHost" disable="true" layoutX="231.0" layoutY="13.0" prefWidth="164.0" />
+            <TextField fx:id="fxmlTargetPort" disable="true" layoutX="470.0" layoutY="13.0" prefWidth="61.0" />
+            <Button fx:id="onClose" layoutX="952.0" layoutY="14.0" mnemonicParsing="false" text="Close" />
+            <Button id="onremoveAll" fx:id="onRemoveAll" layoutX="841.0" layoutY="14.0" mnemonicParsing="false" text="Remove all" />
+            <Button fx:id="onRemoveSelected" layoutX="723.0" layoutY="14.0" mnemonicParsing="false" text="Remove selected" />
+            <Label layoutX="552.0" layoutY="16.0" text="Format" />
+            <ComboBox fx:id="fxmlFormat" layoutX="604.0" layoutY="15.0">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="Item 1" />
+                  <String fx:value="Item 2" />
+                  <String fx:value="Item 3" />
+                </FXCollections>
+              </items>
+            </ComboBox>
           </children>
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
