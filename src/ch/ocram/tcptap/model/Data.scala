@@ -1,5 +1,61 @@
 package ch.ocram.tcptap.model
 
+object Data {
+  def getXmlString(buffer: Array[Byte]) = {
+    val str = new StringBuilder()
+    val tmpBuf = new StringBuilder()
+
+    var indent = 0
+    buffer.foreach({ b =>
+      val ch = b.asInstanceOf[Char]
+
+      if ("></?".indexOf(ch) >= 0) {
+        tmpBuf.append(ch);
+      } else {
+        if (tmpBuf.size > 0) {
+          val part = tmpBuf.toString()
+          part match {
+            case "/></" => {
+              indent -= 1
+              str.append("/>\n").append("  " * indent).append("</")
+            }
+            case "/><" => {
+              indent += 1
+              str.append("/>\n").append("  " * indent).append("<")
+            }
+            case "></" => {
+              str.append(">\n").append("  " * indent).append("</")
+              indent -= 1
+            }
+            case "><" => {
+              indent += 1
+              str.append(">\n").append("  " * indent).append("<")
+            }
+            case "</" => {
+              indent -= 1
+              str.append("</")
+            }
+            case "?></" => {
+              str.append("?>\n").append("  " * indent).append("</")
+            }
+            case "?><" => {
+              str.append("?>\n").append("  " * indent).append("<")
+            }
+            case _ => {
+              str.append(part)
+            }
+          }
+          tmpBuf.clear()
+        }
+        str.append(ch)
+      }
+    })
+
+    str.append(tmpBuf)
+    str.toString()
+  }
+}
+
 class Data {
 
   private var buffer = new Array[Byte](1024)
@@ -22,28 +78,11 @@ class Data {
     this.synchronized {
       fmt match {
         case "String" => new String(buffer, 0, currentIndex)
-        case "XML" => this.getXmlString()
+        case "XML" => Data.getXmlString(this.buffer)
         case "HEX" => this.getHexString()
         case _ => "unknown format"
       }
     }
-  }
-
-  private def getXmlString() = {
-    val str = new StringBuilder()
-
-    var before: Char = ' '
-    this.buffer.foreach({ b =>
-      val ch = b.asInstanceOf[Char]
-
-      if (ch == '<' && before == '>') {
-        str.append('\n')
-      }
-      str.append(ch)
-      before = ch
-    })
-
-    str.toString()
   }
 
   private def getHexString() = {

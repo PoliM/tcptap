@@ -82,6 +82,8 @@ class TapViewController(val srcPort: Int, val host: String, val trgPort: Int) ex
 
   private var view: Parent = null
 
+  private var currentRecord: ConnectionRecord = null;
+
   val fxmlLoader = new FXMLLoader(getClass.getResource("TapView.fxml"));
   fxmlLoader.setController(this);
   try {
@@ -133,12 +135,16 @@ class TapViewController(val srcPort: Int, val host: String, val trgPort: Int) ex
     this.format += "XML"
     this.format += "HEX"
     this.format.selectionModel().select(0);
-    
+    this.format.selectionModel().selectedItem.onChange((_, _, _) => this.showRecord())
+
     this.tableConnections.items = this.connectionList
     val selmodel = this.tableConnections.selectionModel()
     selmodel.selectionMode = SelectionMode.SINGLE
     selmodel.cellSelectionEnabled = false
-    selmodel.selectedItem.onChange((_, _, newitem) => { this.showRecord(newitem) })
+    selmodel.selectedItem.onChange((_, _, newitem) => {
+      this.currentRecord = newitem;
+      this.showRecord()
+    })
 
     this.columnId.cellValueFactory = { _.value.id }
     this.columnTime.cellValueFactory = { _.value.time }
@@ -153,14 +159,14 @@ class TapViewController(val srcPort: Int, val host: String, val trgPort: Int) ex
     new Thread(this.connectionListener).start();
   }
 
-  def showRecord(record: ConnectionRecord) {
-    if (record == null) {
+  def showRecord() {
+    if (this.currentRecord == null) {
       this.textRequest.text = ""
       this.textResponse.text = ""
     } else {
       val fmt = this.format.selectionModel().selectedItem()
-      this.textRequest.text = record.client2Target.getFormatedString(fmt)
-      this.textResponse.text = record.target2Client.getFormatedString(fmt)
+      this.textRequest.text = this.currentRecord.client2Target.getFormatedString(fmt)
+      this.textResponse.text = this.currentRecord.target2Client.getFormatedString(fmt)
     }
   }
 }

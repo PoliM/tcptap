@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1024.0" xmlns:fx="http://javafx.com/fxml">
+<AnchorPane id="AnchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1024.0" xmlns:fx="http://javafx.com/fxml">
   <children>
     <SplitPane dividerPositions="0.38596491228070173" focusTraversable="true" orientation="VERTICAL" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <items>
@@ -28,9 +28,9 @@
             <TextField fx:id="fxmlListeningPort" disable="true" layoutX="99.0" layoutY="13.0" prefWidth="61.0" />
             <TextField fx:id="fxmlTargetHost" disable="true" layoutX="231.0" layoutY="13.0" prefWidth="164.0" />
             <TextField fx:id="fxmlTargetPort" disable="true" layoutX="470.0" layoutY="13.0" prefWidth="61.0" />
-            <Button fx:id="onClose" layoutX="952.0" layoutY="14.0" mnemonicParsing="false" text="Close" />
-            <Button id="onremoveAll" fx:id="onRemoveAll" layoutX="841.0" layoutY="14.0" mnemonicParsing="false" text="Remove all" />
-            <Button fx:id="onRemoveSelected" layoutX="723.0" layoutY="14.0" mnemonicParsing="false" text="Remove selected" />
+            <Button fx:id="onClose" disable="true" layoutX="952.0" layoutY="14.0" mnemonicParsing="false" text="Close" />
+            <Button id="onremoveAll" fx:id="onRemoveAll" disable="true" layoutX="841.0" layoutY="14.0" mnemonicParsing="false" text="Remove all" />
+            <Button fx:id="onRemoveSelected" disable="true" layoutX="723.0" layoutY="14.0" mnemonicParsing="false" text="Remove selected" />
             <Label layoutX="552.0" layoutY="16.0" text="Format" />
             <ComboBox fx:id="fxmlFormat" layoutX="604.0" layoutY="15.0">
               <items>

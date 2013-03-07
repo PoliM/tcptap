@@ -17,6 +17,8 @@ class ConnectionMonitor(val sourceSocket: Socket, val targetSocket: Socket, val 
     th1.join();
     th2.join();
 
+    this.connectionRecord.activity.set("closed")
+      
     sourceSocket.close();
     targetSocket.close();
   }
