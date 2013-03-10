@@ -7,19 +7,38 @@ import ch.ocram.tcptap.model.ConnectionRecord
 class ConnectionMonitor(val sourceSocket: Socket, val targetSocket: Socket, val index: Int, val connectionRecord: ConnectionRecord)
   extends Runnable {
 
-  def run() {
-    val th1 = new Thread(new Pipe(sourceSocket.getInputStream(), targetSocket.getOutputStream(), connectionRecord.client2Target));
-    th1.start();
+  var pipe1: Pipe = null
+  var pipe2: Pipe = null
 
-    val th2 = new Thread(new Pipe(targetSocket.getInputStream(), sourceSocket.getOutputStream(), connectionRecord.target2Client));
+  def run() {
+    pipe1 = new Pipe(sourceSocket.getInputStream(), targetSocket.getOutputStream(), connectionRecord.client2Target)
+    //    val th1 = new Thread(pipe1);
+    //    th1.start();
+
+    pipe2 = new Pipe(targetSocket.getInputStream(), sourceSocket.getOutputStream(), connectionRecord.target2Client)
+    val th2 = new Thread(pipe2);
     th2.start();
 
-    th1.join();
+    pipe1.run();
+    //th1.join();
     th2.join();
 
     this.connectionRecord.activity.set("closed")
-      
+
     sourceSocket.close();
     targetSocket.close();
+  }
+
+  def abort() {
+    pipe1.abort()
+    pipe2.abort()
+
+    if (!sourceSocket.isClosed()) {
+      sourceSocket.close()
+    }
+    
+    if (!targetSocket.isClosed()) {
+      targetSocket.close()
+    }
   }
 }

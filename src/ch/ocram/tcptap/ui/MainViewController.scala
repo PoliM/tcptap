@@ -1,8 +1,10 @@
 package ch.ocram.tcptap.ui
 
+import scalafx.Includes._
 import java.io.IOException
 import java.net.URL
 import java.util
+import javafx.{ event => jfxe }
 import javafx.{ fxml => jfxf }
 import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
@@ -39,6 +41,8 @@ class MainViewController extends jfxf.Initializable {
     monitorTab = new Tab(tabMonitor)
     tabs = new TabPane(tabsMain)
 
+    tabs.tabClosingPolicy = TabPane.TabClosingPolicy.SELECTED_TAB
+    monitorTab.closable = false
     val monitorConfigViewController = new MonitorConfigViewController(this)
     monitorTab.setContent(monitorConfigViewController.getView)
   }
@@ -49,6 +53,8 @@ class MainViewController extends jfxf.Initializable {
 
     val tab = new Tab()
     tab.setContent(tapViewController.getView)
+    tab.closable = true;
+    tab.onClosed = {tapViewController.close()}
     
     tab.text = s"Tapping ${srcPort} ==> ${host}:${trgPort}"
     

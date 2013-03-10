@@ -25,9 +25,16 @@ import scalafx.scene.control.TextArea
 import scalafx.beans.value.ObservableValue
 import scalafx.scene.control.SelectionMode
 import scalafx.scene.control.ComboBox
+import javafx.scene.{layout => jfxsl }
 
 class TapViewController(val srcPort: Int, val host: String, val trgPort: Int) extends jfxf.Initializable {
 
+  @jfxf.FXML
+  private var fxmlMainSplit : jfxsc.SplitPane = null
+  
+  @jfxf.FXML
+  private var fxmlLeftPane : jfxsl.AnchorPane = null
+  
   @jfxf.FXML
   private var fxmlListeningPort: jfxsc.TextField = null
   private var listeningPort: TextField = _
@@ -37,36 +44,32 @@ class TapViewController(val srcPort: Int, val host: String, val trgPort: Int) ex
   private var targetHost: TextField = _
 
   @jfxf.FXML
-  private var fxmlTargetPort: jfxsc.TextField = null
-  private var targetPort: TextField = _
-
-  @jfxf.FXML
   private var fxmlFormat: jfxsc.ComboBox[String] = null
   private var format: ComboBox[String] = _
 
   @jfxf.FXML
-  private var fxmlTableConnections: jfxsc.TableView[ConnectionRecord] = null
-  private var tableConnections: TableView[ConnectionRecord] = _
+  private var fxmlTableConnections: jfxsc.TableView[ConnectionMonitor] = null
+  private var tableConnections: TableView[ConnectionMonitor] = _
 
   @jfxf.FXML
-  private var fxmlColId: jfxsc.TableColumn[ConnectionRecord, String] = null
-  private var columnId: TableColumn[ConnectionRecord, String] = _
+  private var fxmlColId: jfxsc.TableColumn[ConnectionMonitor, String] = null
+  private var columnId: TableColumn[ConnectionMonitor, String] = _
 
   @jfxf.FXML
-  private var fxmlColTime: jfxsc.TableColumn[ConnectionRecord, String] = null
-  private var columnTime: TableColumn[ConnectionRecord, String] = _
+  private var fxmlColTime: jfxsc.TableColumn[ConnectionMonitor, String] = null
+  private var columnTime: TableColumn[ConnectionMonitor, String] = _
 
   @jfxf.FXML
-  private var fxmlColActivity: jfxsc.TableColumn[ConnectionRecord, String] = null
-  private var columnActivity: TableColumn[ConnectionRecord, String] = _
+  private var fxmlColActivity: jfxsc.TableColumn[ConnectionMonitor, String] = null
+  private var columnActivity: TableColumn[ConnectionMonitor, String] = _
 
   @jfxf.FXML
-  private var fxmlColRemoteHost: jfxsc.TableColumn[ConnectionRecord, String] = null
-  private var columnRemoteHost: TableColumn[ConnectionRecord, String] = _
+  private var fxmlColRemoteHost: jfxsc.TableColumn[ConnectionMonitor, String] = null
+  private var columnRemoteHost: TableColumn[ConnectionMonitor, String] = _
 
   @jfxf.FXML
-  private var fxmlColInfo: jfxsc.TableColumn[ConnectionRecord, String] = null
-  private var columnInfo: TableColumn[ConnectionRecord, String] = _
+  private var fxmlColInfo: jfxsc.TableColumn[ConnectionMonitor, String] = null
+  private var columnInfo: TableColumn[ConnectionMonitor, String] = _
 
   @jfxf.FXML
   private var fxmlRequest: jfxsc.TextArea = null
@@ -76,13 +79,13 @@ class TapViewController(val srcPort: Int, val host: String, val trgPort: Int) ex
   private var fxmlResponse: jfxsc.TextArea = null
   private var textResponse: TextArea = _
 
-  private val connectionList = new ObservableBuffer[ConnectionRecord]()
+  private val connectionList = new ObservableBuffer[ConnectionMonitor]()
 
   private val connectionListener = new ConnectListener(this.connectionList, srcPort, host, trgPort)
 
   private var view: Parent = null
 
-  private var currentRecord: ConnectionRecord = null;
+  private var currentMonitor: ConnectionMonitor = null;
 
   val fxmlLoader = new FXMLLoader(getClass.getResource("TapView.fxml"));
   fxmlLoader.setController(this);
@@ -94,28 +97,30 @@ class TapViewController(val srcPort: Int, val host: String, val trgPort: Int) ex
 
   def getView = view
 
-  @jfxf.FXML
-  def onClose(event: jfxe.ActionEvent) {
-
+  def close() {
+	  this.onRemoveAll(null)
+	  this.connectionListener.abortListening()
   }
-
+  
   @jfxf.FXML
   def onRemoveSelected(event: jfxe.ActionEvent) {
-    val record = this.tableConnections.selectionModel().selectedItem()
-    if (record != null) {
-
+    if (this.currentMonitor != null){
+      this.currentMonitor.abort()
     }
+    
+    this.connectionList -= this.currentMonitor
+    this.currentMonitor = null
   }
 
   @jfxf.FXML
   def onRemoveAll(event: jfxe.ActionEvent) {
-
+	  this.connectionList.foreach(mon => mon.abort())
+	  this.connectionList.clear()
   }
 
   def initialize(url: URL, rb: util.ResourceBundle) {
     this.listeningPort = new TextField(this.fxmlListeningPort)
     this.targetHost = new TextField(this.fxmlTargetHost)
-    this.targetPort = new TextField(this.fxmlTargetPort)
     this.format = new ComboBox(this.fxmlFormat)
     this.tableConnections = new TableView(this.fxmlTableConnections)
     this.columnId = new TableColumn(this.fxmlColId)
@@ -126,9 +131,10 @@ class TapViewController(val srcPort: Int, val host: String, val trgPort: Int) ex
     this.textRequest = new TextArea(this.fxmlRequest)
     this.textResponse = new TextArea(this.fxmlResponse)
 
+    jfxsc.SplitPane.setResizableWithParent(this.fxmlLeftPane, false)
+    
     this.listeningPort.text = srcPort.toString()
-    this.targetHost.text = host
-    this.targetPort.text = trgPort.toString()
+    this.targetHost.text = host + ":" + trgPort.toString()
 
     this.format.items().clear()
     this.format += "String"
@@ -142,15 +148,15 @@ class TapViewController(val srcPort: Int, val host: String, val trgPort: Int) ex
     selmodel.selectionMode = SelectionMode.SINGLE
     selmodel.cellSelectionEnabled = false
     selmodel.selectedItem.onChange((_, _, newitem) => {
-      this.currentRecord = newitem;
+      this.currentMonitor = newitem;
       this.showRecord()
     })
 
-    this.columnId.cellValueFactory = { _.value.id }
-    this.columnTime.cellValueFactory = { _.value.time }
-    this.columnActivity.cellValueFactory = { _.value.activity }
-    this.columnRemoteHost.cellValueFactory = { _.value.remoteHost }
-    this.columnInfo.cellValueFactory = { _.value.info }
+    this.columnId.cellValueFactory = { _.value.connectionRecord.id }
+    this.columnTime.cellValueFactory = { _.value.connectionRecord.time }
+    this.columnActivity.cellValueFactory = { _.value.connectionRecord.activity }
+    this.columnRemoteHost.cellValueFactory = { _.value.connectionRecord.remoteHost }
+    this.columnInfo.cellValueFactory = { _.value.connectionRecord.info }
 
     val textStyle = "-fx-font-family: 'Consolas', 'Envy Code R', 'monospace';"
     this.textRequest.style = textStyle
@@ -160,13 +166,13 @@ class TapViewController(val srcPort: Int, val host: String, val trgPort: Int) ex
   }
 
   def showRecord() {
-    if (this.currentRecord == null) {
+    if (this.currentMonitor == null) {
       this.textRequest.text = ""
       this.textResponse.text = ""
     } else {
       val fmt = this.format.selectionModel().selectedItem()
-      this.textRequest.text = this.currentRecord.client2Target.getFormatedString(fmt)
-      this.textResponse.text = this.currentRecord.target2Client.getFormatedString(fmt)
+      this.textRequest.text = this.currentMonitor.connectionRecord.client2Target.getFormatedString(fmt)
+      this.textResponse.text = this.currentMonitor.connectionRecord.target2Client.getFormatedString(fmt)
     }
   }
 }

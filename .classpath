@@ -8,7 +8,7 @@
 			<attribute name="javadoc_location" value="http://docs.oracle.com/javafx/2/api/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/MarcoPoli/Downloads/Scala/scala-2.10.1-RC2/lib/scala-library.jar"/>
+	<classpathentry kind="lib" path="C:/Users/MarcoPoli/Downloads/Scala/scala-2.10.1-RC2/lib/scala-library.jar" sourcepath="C:/Users/MarcoPoli/.m2/repository/org/scala-lang/scala-library/2.10.1-RC2/scala-library-2.10.1-RC2-sources.jar"/>
 	<classpathentry kind="lib" path="C:/Users/MarcoPoli/Downloads/Scala/scala-2.10.1-RC2/lib/scala-reflect.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

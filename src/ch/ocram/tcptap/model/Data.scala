@@ -48,6 +48,7 @@ object Data {
           tmpBuf.clear()
         }
         str.append(ch)
+        indent = Math.max(0, indent)
       }
     })
 
@@ -76,11 +77,16 @@ class Data {
 
   def getFormatedString(fmt: String) = {
     this.synchronized {
+      try{
       fmt match {
         case "String" => new String(buffer, 0, currentIndex)
         case "XML" => Data.getXmlString(this.buffer)
         case "HEX" => this.getHexString()
         case _ => "unknown format"
+      }
+      }
+      catch {
+        case ex : Exception => ex.getStackTraceString
       }
     }
   }

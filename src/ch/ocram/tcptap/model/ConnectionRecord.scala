@@ -18,6 +18,6 @@ class ConnectionRecord(var id_ : Int, var remoteHost_ : String) {
   val target2Client = new Data()
   
   def currentTime() ={
-    new SimpleDateFormat("yyyy.MM.dd hh:mm:ss").format(new Date());
+    new SimpleDateFormat("yyyy.MM.dd hh:mm:ss,SSS").format(new Date());
   }
 }

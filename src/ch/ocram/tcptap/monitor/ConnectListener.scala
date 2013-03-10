@@ -4,8 +4,9 @@ import java.net.ServerSocket
 import java.net.Socket
 import scalafx.collections.ObservableBuffer
 import ch.ocram.tcptap.model.ConnectionRecord
+import java.net.SocketException
 
-class ConnectListener(val model: ObservableBuffer[ConnectionRecord], val listenPort: Int, val targetHost: String, val targetPort: Int) extends Runnable {
+class ConnectListener(val model: ObservableBuffer[ConnectionMonitor], val listenPort: Int, val targetHost: String, val targetPort: Int) extends Runnable {
 
   private var abort = false;
 
@@ -20,20 +21,22 @@ class ConnectListener(val model: ObservableBuffer[ConnectionRecord], val listenP
     this.serverSocket = new ServerSocket(listenPort);
 
     var count = 0;
-    while (!abort) { {
-        
+    while (!abort) {
+
+      try {
         val sourceSocket = serverSocket.accept();
-
         val connectionRecord = new ConnectionRecord(count, sourceSocket.getRemoteSocketAddress().toString())
-
-        model += connectionRecord
-        
         val targetSocket = new Socket(targetHost, targetPort);
-
-        new Thread(new ConnectionMonitor(sourceSocket, targetSocket, count, connectionRecord)).start();
-
-        count += 1
+        val monitor = new ConnectionMonitor(sourceSocket, targetSocket, count, connectionRecord)
+        model += monitor
+        new Thread(monitor).start();
+      } catch {
+        case sex: SocketException => {
+          // nothing yet
+        }
       }
+      count += 1
+
     }
 
     serverSocket.close();
