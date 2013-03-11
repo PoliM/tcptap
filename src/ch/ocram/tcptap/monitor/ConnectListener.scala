@@ -5,6 +5,7 @@ import java.net.Socket
 import scalafx.collections.ObservableBuffer
 import ch.ocram.tcptap.model.ConnectionRecord
 import java.net.SocketException
+import scalafx.application.Platform
 
 class ConnectListener(val model: ObservableBuffer[ConnectionMonitor], val listenPort: Int, val targetHost: String, val targetPort: Int) extends Runnable {
 
@@ -28,7 +29,13 @@ class ConnectListener(val model: ObservableBuffer[ConnectionMonitor], val listen
         val connectionRecord = new ConnectionRecord(count, sourceSocket.getRemoteSocketAddress().toString())
         val targetSocket = new Socket(targetHost, targetPort);
         val monitor = new ConnectionMonitor(sourceSocket, targetSocket, count, connectionRecord)
-        model += monitor
+
+        Platform.runLater(new Runnable {
+          def run() {
+            model += monitor
+          }
+        })
+
         new Thread(monitor).start();
       } catch {
         case sex: SocketException => {
