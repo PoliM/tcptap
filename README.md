@@ -14,4 +14,11 @@ KNOWN ISSUES
 ============
 
 - better exception handling
+
+NEXT FEATURES
+=============
+
 - bookmarks or "last monitors"
+- automated build
+- better testing
+- deployment
